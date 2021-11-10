@@ -12,14 +12,14 @@ type WalletChipProps = {
 
 export const WalletChip = ({ from, to, value, loading, position = 'top' }: WalletChipProps) => {
   const renderLabel = () => {
-    return loading ? "Loading..." : value ? `1${getCurrency(from)}=${value}${getCurrency(to)}` : `Try After!`
+    return loading ? 'Loading...' : value ? `1${getCurrency(from)}=${value}${getCurrency(to)}` : `Try After!`
   }
 
   return (
     <Box style={{ position: 'absolute', [position]: -16, right: '50%' }} mr={2} ml={2}>
       <Chip
         label={renderLabel()}
-        color={loading ? "info" : value ? 'success' : 'error'}
+        color={loading ? 'info' : value ? 'success' : 'error'}
         variant='outlined'
         style={{ backgroundColor: 'white', minWidth: 120 }}
       />

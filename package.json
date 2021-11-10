@@ -19,6 +19,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test:covrage": "react-scripts test --coverage",
     "eject": "react-scripts eject",
     "format:fix": "prettier --write \"**/*.{ts,tsx}\""
   },

@@ -34,7 +34,7 @@ function App() {
       <div className='app'>
         <Container>
           <Box display='flex' justifyContent='center'>
-            <CircularProgress color="primary" variant='indeterminate' size={70} />
+            <CircularProgress color='primary' variant='indeterminate' size={70} />
           </Box>
         </Container>
       </div>
@@ -54,7 +54,7 @@ function App() {
             <WalletRow currencies={['GBP', 'USD', 'EUR']} onChange={handleChange} index={1} />
           </Box>
         </WalletCard>
-        <Button color='secondary' variant='contained' onClick={() => { }}>
+        <Button color='secondary' variant='contained' onClick={() => {}}>
           Exchange
         </Button>
       </Container>
