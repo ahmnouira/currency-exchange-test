@@ -8,9 +8,8 @@ import { CurrencyName } from './types/currency'
 import { convertCurrency } from './api/convertCurrency'
 
 function App() {
-
   // this represent the user selected currencies
-  const [currencies, setCurrencies] = React.useState<CurrencyName[]>(["EUR", "GBP"])
+  const [currencies, setCurrencies] = React.useState<CurrencyName[]>(['EUR', 'GBP'])
   const [rate, setRate] = React.useState<number | null>(null)
   const [loading, setLoading] = React.useState<boolean>(false)
 
@@ -24,7 +23,6 @@ function App() {
     setLoading(false)
   }, [currencies])
 
-
   const handleChange = async (currency: CurrencyName, idx: number) => {
     const updatedCurrencies = [...currencies]
     updatedCurrencies[idx] = currency
@@ -35,8 +33,8 @@ function App() {
     return (
       <div className='app'>
         <Container>
-          <Box display="flex" justifyContent="center">
-            <CircularProgress color="primary" variant="indeterminate" size={70} />
+          <Box display='flex' justifyContent='center'>
+            <CircularProgress color='primary' variant='indeterminate' size={70} />
           </Box>
         </Container>
       </div>
@@ -46,15 +44,17 @@ function App() {
   return (
     <div className='app'>
       <Container>
-        <Typography variant="h5" color='gray'>Currency Exchange Proptype</Typography>
+        <Typography variant='h5' color='gray'>
+          Currency Exchange Proptype
+        </Typography>
         <WalletCard>
-          <WalletRow currencies={['EUR', 'GBP', "USD"]} onChange={handleChange} index={0} />
+          <WalletRow currencies={['EUR', 'GBP', 'USD']} onChange={handleChange} index={0} />
           <Box style={{ width: '100%', position: 'relative', backgroundColor: '#dfe6e9' }}>
-            <WalletChip position="top" from={currencies[0]} to={currencies[1]} value={rate} loading={loading} />
-            <WalletRow currencies={['GBP', 'USD', "EUR"]} onChange={handleChange} index={1} />
+            <WalletChip position='top' from={currencies[0]} to={currencies[1]} value={rate} loading={loading} />
+            <WalletRow currencies={['GBP', 'USD', 'EUR']} onChange={handleChange} index={1} />
           </Box>
         </WalletCard>
-        <Button color='secondary' variant='contained' onClick={() => { }}>
+        <Button color='secondary' variant='contained' onClick={() => {}}>
           Exchange
         </Button>
       </Container>
