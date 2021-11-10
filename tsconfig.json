@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "es5",
     "lib": [
-      "dom",
+      "dom"
     ],
     "allowJs": true,
     "skipLibCheck": true,
@@ -20,5 +20,8 @@
   },
   "exclude": [
     "node_modules"
+  ],
+  "include": [
+    "src"
   ]
 }
