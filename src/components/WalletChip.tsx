@@ -12,7 +12,7 @@ type WalletChipProps = {
 
 export const WalletChip = ({ from, to, value, loading, position = 'top' }: WalletChipProps) => {
   const renderLabel = () => {
-    return loading ? 'Loading...' : value ? `1${getCurrency(from)}=${value}${getCurrency(to)}` : `Try After!`
+    return loading ? 'Loading...' : value ? `1${getCurrency(from)}=${value.toFixed(2)}${getCurrency(to)}` : `Try After!`
   }
 
   return (
