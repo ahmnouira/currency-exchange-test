@@ -11,18 +11,24 @@ type WalletProps = {
   rate: number
   onChange: (currency: CurrencyName, idx: number) => void
   value: number
-  onChangeValue: (value: number, idx: number) => void
+  onChangeValue: (value: number, idx: number, current: number) => void
 }
 
 export const WalletRow = ({ currencies, index, onChange, rate, value, onChangeValue }: WalletProps) => {
-  const [tempValue, setTempValue] = React.useState<number>(value)
+  const [tempValue, setTempValue] = React.useState<number>(value ? value : 0)
   const [currency, setCurrency] = React.useState(currencies[0])
   const [blance, setBlance] = React.useState(getBlance(currencies[0]))
   const [error, setError] = React.useState(false)
+  const [focused, setFocused] = React.useState(false)
 
   React.useEffect(() => {
-    setTempValue(value)
-  }, [value])
+    console.log(value)
+    setTempValue(value ? value : 0)
+
+    return () => {
+      setFocused(false)
+    }
+  }, [value, rate])
 
   const handleChange = (event) => {
     const currency = event.target.value as CurrencyName
@@ -34,19 +40,15 @@ export const WalletRow = ({ currencies, index, onChange, rate, value, onChangeVa
 
   const handleValue = (e) => {
     const value = e.currentTarget.value
-    setTempValue(value)
-    onChangeValue(value, index)
     const pattern = /^\d+$/
+    setTempValue(value)
     if (!value || !pattern.test(value) || value < 0) {
       setError(true)
+      onChangeValue(0, index, value)
       return
     }
-
+    onChangeValue(value * parseInt(rate.toFixed(2)), index, value)
     setError(false)
-  }
-
-  const renderValue = () => {
-    return !value ? (tempValue ? tempValue : '') : value.toFixed(2)
   }
 
   return (
@@ -67,11 +69,14 @@ export const WalletRow = ({ currencies, index, onChange, rate, value, onChangeVa
         </Box>
       </Box>
       <TextField
-        value={renderValue()}
-        error={Number(blance) < Number(tempValue) || error}
+        disabled={!rate}
+        value={tempValue ? tempValue : ""}
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
+        error={(blance < Number(tempValue)) && focused || error}
         style={{ willChange: 'scroll-position', width: 120 }}
         InputProps={{
-          startAdornment: <StartAndor context='password' onClick={() => {}} value={true} />,
+          startAdornment: <StartAndor context={index === 0 ? "add" : "remove"} />,
         }}
         onChange={handleValue}
         variant='outlined'

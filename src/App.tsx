@@ -21,9 +21,7 @@ function App() {
     setLoading(true)
     const getData = async () => {
       const result = await convertCurrency(currencies[0], currencies[1])
-
-      console.log(result)
-
+      setValues([0, 0])
       setRate(result[`${currencies[0]}_${currencies[1]}`] as number)
     }
     getData()
@@ -33,13 +31,12 @@ function App() {
   const handleChange = (currency: CurrencyName, idx: number) => {
     const updatedCurrencies = [...currencies]
     updatedCurrencies[idx] = currency
-    setValues([0, 0])
     setCurrencies(updatedCurrencies)
   }
 
-  const handleChangeValues = (value: number, idx: number) => {
+  const handleChangeValues = (value: number, idx: number, current: number) => {
     const updatedValues = [...values]
-    updatedValues[idx] = value * rate
+    updatedValues[idx] = value
     setValues(updatedValues)
   }
 
@@ -53,6 +50,11 @@ function App() {
         </Container>
       </div>
     )
+  }
+
+  const handleExchange = () => {
+    console.log(values)
+    alert(JSON.stringify(values))
   }
 
   return (
@@ -82,7 +84,7 @@ function App() {
             />
           </Box>
         </WalletCard>
-        <Button color='secondary' variant='contained' onClick={() => {}}>
+        <Button color='secondary' variant='contained' onClick={handleExchange} disabled={values.every(value => value === 0) || !rate}>
           Exchange
         </Button>
       </Container>
