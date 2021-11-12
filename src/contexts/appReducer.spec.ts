@@ -38,12 +38,38 @@ describe('appReducer', () => {
     expect(newAppState.loading).toBe(false)
   })
 
+  it('should handle SET_FROM_VALUE action', () => {
+    const newAppState = appReducer(initialState, {
+      type: 'SET_FROM_VALUE',
+      payload: 80,
+    })
+    expect(newAppState.toValue).toBe(80)
+    expect(newAppState.fromValue).toBe(Number((80 / 1.2).toFixed(2)))
+  })
+
+  it('should handle SET_TO_VALUE action', () => {
+    const newAppState = appReducer(initialState, {
+      type: 'SET_TO_VALUE',
+      payload: 70,
+    })
+    expect(newAppState.fromValue).toBe(70)
+    expect(newAppState.toValue).toBe(Number((70 * 1.23).toFixed(2)))
+  })
+
   it('should handle SET_TO_VALUE_ERROR action', () => {
     const newAppState = appReducer(initialState, {
       type: 'SET_TO_VALUE_ERROR',
-      payload: 'Error in to value',
+      payload: 'Error "in" to value',
     })
-    expect(newAppState.toValueError).toBe('Error in to value')
+    expect(newAppState.toValueError).toBe('Error "in" to value')
+  })
+
+  it('should handle SET_FROM_VALUE_ERROR action', () => {
+    const newAppState = appReducer(initialState, {
+      type: 'SET_FROM_VALUE_ERROR',
+      payload: 'Error in "from" value',
+    })
+    expect(newAppState.fromValueError).toBe('Error in "from" value')
   })
 
   it('should handle SET_LOADING action', () => {

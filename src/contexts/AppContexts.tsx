@@ -1,10 +1,10 @@
-import { createContext, useReducer, Dispatch } from 'react'
-import type { FC, ReactNode } from 'react'
+import * as React from 'react'
 import { CurrencyName } from '../types/currency'
 import { appReducer } from './appReducer'
 
 type ContextProviderProps = {
-  children: ReactNode
+  children: React.ReactNode
+  appState?: StateType
 }
 
 export type StateType = {
@@ -39,16 +39,16 @@ export const initialState: StateType = {
   },
 }
 
-export const AppContext = createContext<{
+export const AppContext = React.createContext<{
   state: StateType
-  dispatch: Dispatch<any>
+  dispatch: React.Dispatch<any>
 }>({
   state: initialState,
-  dispatch: () => null,
+  dispatch: () => {},
 })
 
-export const AppProvider: FC<ContextProviderProps> = ({ children }) => {
-  const [state, dispatch] = useReducer(appReducer, initialState)
+export const AppProvider: React.FC<ContextProviderProps> = ({ children, appState = initialState }) => {
+  const [state, dispatch] = React.useReducer(appReducer, appState)
 
   return <AppContext.Provider value={{ state, dispatch }}>{children}</AppContext.Provider>
 }
