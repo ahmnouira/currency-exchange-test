@@ -4,58 +4,57 @@ import { CurrencyName } from '../types/currency'
 import { StartAndor } from './StartAndor'
 import { getBlance } from '../helpers/getBalance'
 import { getCurrency } from '../helpers/getCurrency'
+import { useAppState } from '../hoops/useApp'
 
 type WalletProps = {
   currencies: CurrencyName[]
-  index: number
-  rate: number
-  onChange: (currency: CurrencyName, idx: number) => void
-  value: number
-  onChangeValue: (value: number, idx: number, current: number) => void
+  name: 'from' | 'to'
 }
 
-export const WalletRow = ({ currencies, index, onChange, rate, value, onChangeValue }: WalletProps) => {
-  const [tempValue, setTempValue] = React.useState<number>(value ? value : 0)
-  const [currency, setCurrency] = React.useState(currencies[0])
-  const [blance, setBlance] = React.useState(getBlance(currencies[0]))
+export const WalletRow = ({ currencies, name }: WalletProps) => {
+  const {
+    state: { fromValue, toValue, rate, from, to, loading }, dispatch
+  } = useAppState()
+  const isTo = name === 'to'
+
+  const [tempValue, setTempValue] = React.useState<number>(isTo ? toValue : fromValue)
+  const [blance, setBlance] = React.useState(getBlance(isTo ? to : from))
   const [error, setError] = React.useState(false)
-  const [focused, setFocused] = React.useState(false)
 
   React.useEffect(() => {
-    console.log(value)
-    setTempValue(value ? value : 0)
+    setTempValue(isTo ? toValue : fromValue)
+  }, [fromValue, rate, toValue])
 
-    return () => {
-      setFocused(false)
-    }
-  }, [value, rate])
-
-  const handleChange = (event) => {
+  const handleChange = (event: any) => {
     const currency = event.target.value as CurrencyName
     if (!currency) return
     setBlance(getBlance(currency))
-    setCurrency(currency)
-    onChange(currency, index)
+    dispatch({ type: isTo ? "SET_TO" : "SET_FROM", payload: currency })
   }
 
-  const handleValue = (e) => {
+  const handleValue = (e: any) => {
     const value = e.currentTarget.value
     const pattern = /^\d+$/
     setTempValue(value)
+
+
     if (!value || !pattern.test(value) || value < 0) {
       setError(true)
-      onChangeValue(0, index, value)
+      dispatch({ type: isTo ? "SET_FROM_VALUE" : "SET_TO_VALUE", payload: 0 })
       return
     }
-    onChangeValue(value * parseInt(rate.toFixed(2)), index, value)
+
+
+    dispatch({ type: isTo ? "SET_FROM_VALUE" : "SET_TO_VALUE", payload: value })
     setError(false)
   }
+
 
   return (
     <Box display='flex' justifyContent='space-between' alignItems='center' style={{ marginTop: 8, padding: 8 }}>
       <Box m={2}>
-        <TextField select fullWidth style={{}} value={currency} onChange={handleChange} variant='outlined'>
-          {currencies.map((option, index) => (
+        <TextField select fullWidth style={{}} value={isTo ? to : from} onChange={handleChange} variant='outlined'>
+          {currencies.map((option) => (
             <MenuItem key={option} value={option}>
               {option}
             </MenuItem>
@@ -63,20 +62,18 @@ export const WalletRow = ({ currencies, index, onChange, rate, value, onChangeVa
         </TextField>
         <Box mt={1}>
           <Typography color='gray'>
-            Blance: {getCurrency(currency)}
+            Blance: {getCurrency(isTo ? to : from)}
             {blance}
           </Typography>
         </Box>
       </Box>
       <TextField
-        disabled={!rate}
-        value={tempValue ? tempValue : ''}
-        onFocus={() => setFocused(true)}
-        onBlur={() => setFocused(false)}
-        error={(blance < Number(tempValue) && focused) || error}
+        disabled={!rate || loading}
+        value={tempValue ? tempValue : ""}
+        error={error}
         style={{ willChange: 'scroll-position', width: 120 }}
         InputProps={{
-          startAdornment: <StartAndor context={index === 0 ? 'add' : 'remove'} />,
+          startAdornment: <StartAndor context={!isTo ? 'add' : 'remove'} />,
         }}
         onChange={handleValue}
         variant='outlined'
