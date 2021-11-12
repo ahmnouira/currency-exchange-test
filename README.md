@@ -1,3 +1,3 @@
 # currency-exchange-test
 
-demo: 
+demo: https://currency-exchange-test.netlify.app
