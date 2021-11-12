@@ -70,13 +70,13 @@ export const WalletRow = ({ currencies, index, onChange, rate, value, onChangeVa
       </Box>
       <TextField
         disabled={!rate}
-        value={tempValue ? tempValue : ""}
+        value={tempValue ? tempValue : ''}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
-        error={(blance < Number(tempValue)) && focused || error}
+        error={(blance < Number(tempValue) && focused) || error}
         style={{ willChange: 'scroll-position', width: 120 }}
         InputProps={{
-          startAdornment: <StartAndor context={index === 0 ? "add" : "remove"} />,
+          startAdornment: <StartAndor context={index === 0 ? 'add' : 'remove'} />,
         }}
         onChange={handleValue}
         variant='outlined'

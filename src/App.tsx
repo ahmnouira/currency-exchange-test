@@ -84,7 +84,12 @@ function App() {
             />
           </Box>
         </WalletCard>
-        <Button color='secondary' variant='contained' onClick={handleExchange} disabled={values.every(value => value === 0) || !rate}>
+        <Button
+          color='secondary'
+          variant='contained'
+          onClick={handleExchange}
+          disabled={values.every((value) => value === 0) || !rate}
+        >
           Exchange
         </Button>
       </Container>

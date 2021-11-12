@@ -16,7 +16,7 @@ export const StartAndor = ({ context }: EndAndorProps) => {
   return (
     <InputAdornment position='start'>
       <IconButton disabled onMouseDown={handleMouseDownPassword}>
-        {context === "add" ? <AddOutlined /> : <RemoveOutlined />}
+        {context === 'add' ? <AddOutlined /> : <RemoveOutlined />}
       </IconButton>
     </InputAdornment>
   )
