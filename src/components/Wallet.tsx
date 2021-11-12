@@ -53,14 +53,14 @@ export const Wallet = () => {
                 type: 'SET_BLANCE',
                 payload: {
                     name: from,
-                    value: Number((blances[from] - fromValue).toFixed(2)),
+                    value: Number(Math.abs((blances[from] - fromValue)).toFixed(2)),
                 },
             })
             dispatch({
                 type: 'SET_BLANCE',
                 payload: {
                     name: to,
-                    value: blances[to] + toValue,
+                    value: Number((Number(blances[to]) + toValue).toFixed(2)),
                 },
             })
         }
