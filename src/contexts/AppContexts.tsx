@@ -9,19 +9,33 @@ type ContextProviderProps = {
 type StateType = {
     fromValue: number
     toValue: number
+    fromValueError: string
+    toValueError: string
     from: CurrencyName
     to: CurrencyName
     loading: boolean
     rate: number | null
+    blances: {
+        EUR: number
+        GBP: number
+        USD: number
+    }
 }
 
 const initialState: StateType = {
     from: 'EUR',
     to: 'GBP',
+    toValueError: null,
+    fromValueError: null,
     fromValue: 0,
     toValue: 0,
     loading: false,
     rate: null,
+    blances: {
+        EUR: 150,
+        GBP: 10,
+        USD: 200,
+    },
 }
 
 const appReducer = (state: StateType, action: any): StateType => {
@@ -65,6 +79,52 @@ const appReducer = (state: StateType, action: any): StateType => {
                 ...state,
                 toValue: action.payload,
                 fromValue: Number((action.payload / state.rate).toFixed(2)),
+            }
+        }
+
+        case 'SET_TO_VALUE': {
+            return {
+                ...state,
+                fromValue: action.payload,
+                toValue: Number((action.payload * state.rate).toFixed(2)),
+            }
+        }
+
+        case 'SET_FROM_VALUE_ERROR': {
+            return {
+                ...state,
+                fromValueError: action.payload,
+            }
+        }
+
+        case 'SET_TO_VALUE_ERROR': {
+            return {
+                ...state,
+                toValueError: action.payload,
+            }
+        }
+
+        case 'REST_VALUES': {
+            return {
+                ...state,
+                fromValue: 0,
+                toValue: 0,
+            }
+        }
+        case 'SET_LOADING': {
+            return {
+                ...state,
+                loading: action.payload,
+            }
+        }
+
+        case 'SET_BLANCE': {
+            return {
+                ...state,
+                blances: {
+                    ...state.blances,
+                    [action.payload.name]: action.payload.value,
+                },
             }
         }
 

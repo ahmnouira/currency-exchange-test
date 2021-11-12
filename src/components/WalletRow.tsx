@@ -2,7 +2,6 @@ import * as React from 'react'
 import { Box, MenuItem, TextField, Typography } from '@mui/material'
 import { CurrencyName } from '../types/currency'
 import { StartAndor } from './StartAndor'
-import { getBlance } from '../helpers/getBalance'
 import { getCurrency } from '../helpers/getCurrency'
 import { useAppState } from '../hoops/useApp'
 
@@ -13,13 +12,14 @@ type WalletProps = {
 
 export const WalletRow = ({ currencies, name }: WalletProps) => {
   const {
-    state: { fromValue, toValue, rate, from, to, loading }, dispatch
+    state: { fromValue, toValue, rate, from, to, loading, blances, fromValueError, toValueError },
+    dispatch,
   } = useAppState()
   const isTo = name === 'to'
 
   const [tempValue, setTempValue] = React.useState<number>(isTo ? toValue : fromValue)
-  const [blance, setBlance] = React.useState(getBlance(isTo ? to : from))
-  const [error, setError] = React.useState(false)
+
+  const [focused, setFocused] = React.useState(false)
 
   React.useEffect(() => {
     setTempValue(isTo ? toValue : fromValue)
@@ -28,27 +28,33 @@ export const WalletRow = ({ currencies, name }: WalletProps) => {
   const handleChange = (event: any) => {
     const currency = event.target.value as CurrencyName
     if (!currency) return
-    setBlance(getBlance(currency))
-    dispatch({ type: isTo ? "SET_TO" : "SET_FROM", payload: currency })
+    dispatch({ type: isTo ? 'SET_TO' : 'SET_FROM', payload: currency })
   }
 
   const handleValue = (e: any) => {
     const value = e.currentTarget.value
     const pattern = /^\d+$/
     setTempValue(value)
-
-
     if (!value || !pattern.test(value) || value < 0) {
-      setError(true)
-      dispatch({ type: isTo ? "SET_FROM_VALUE" : "SET_TO_VALUE", payload: 0 })
+      dispatch({
+        type: isTo ? 'SET_TO_VALUE_ERROR' : 'SET_FROM_VALUE_ERROR',
+        payload: `Invalid ${isTo ? 'to' : 'from'} value!`,
+      })
+      dispatch({ type: isTo ? 'SET_FROM_VALUE' : 'SET_TO_VALUE', payload: 0 })
       return
     }
 
+    if (value > blances[isTo ? to : from]) {
+      dispatch({
+        type: isTo ? 'SET_TO_VALUE_ERROR' : 'SET_FROM_VALUE_ERROR',
+        payload: `Exceed ${isTo ? 'to' : 'from'} blance!`,
+      })
+      return
+    }
 
-    dispatch({ type: isTo ? "SET_FROM_VALUE" : "SET_TO_VALUE", payload: value })
-    setError(false)
+    dispatch({ type: isTo ? 'SET_FROM_VALUE' : 'SET_TO_VALUE', payload: value })
+    dispatch({ type: isTo ? 'SET_TO_VALUE_ERROR' : 'SET_FROM_VALUE_ERROR', payload: null })
   }
-
 
   return (
     <Box display='flex' justifyContent='space-between' alignItems='center' style={{ marginTop: 8, padding: 8 }}>
@@ -63,15 +69,18 @@ export const WalletRow = ({ currencies, name }: WalletProps) => {
         <Box mt={1}>
           <Typography color='gray'>
             Blance: {getCurrency(isTo ? to : from)}
-            {blance}
+            {isTo ? blances[to] : blances[from]}
           </Typography>
         </Box>
       </Box>
       <TextField
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
         disabled={!rate || loading}
-        value={tempValue ? tempValue : ""}
-        error={error}
-        style={{ willChange: 'scroll-position', width: 120 }}
+        value={tempValue ? tempValue : ''}
+        error={isTo ? Boolean(toValueError) : Boolean(fromValueError)}
+        helperText={isTo ? toValueError : fromValueError}
+        style={{ willChange: 'scroll-position', width: 150 }}
         InputProps={{
           startAdornment: <StartAndor context={!isTo ? 'add' : 'remove'} />,
         }}
