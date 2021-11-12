@@ -53,7 +53,7 @@ export const Wallet = () => {
                 type: 'SET_BLANCE',
                 payload: {
                     name: from,
-                    value: blances[from] - fromValue,
+                    value: Number((blances[from] - fromValue).toFixed(2)),
                 },
             })
             dispatch({
