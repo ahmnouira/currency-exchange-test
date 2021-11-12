@@ -19,11 +19,9 @@ export const WalletRow = ({ currencies, name }: WalletProps) => {
 
   const [tempValue, setTempValue] = React.useState<number>(isTo ? toValue : fromValue)
 
-  const [focused, setFocused] = React.useState(false)
-
   React.useEffect(() => {
     setTempValue(isTo ? toValue : fromValue)
-  }, [fromValue, rate, toValue])
+  }, [fromValue, rate, toValue, isTo])
 
   const handleChange = (event: any) => {
     const currency = event.target.value as CurrencyName
@@ -74,8 +72,6 @@ export const WalletRow = ({ currencies, name }: WalletProps) => {
         </Box>
       </Box>
       <TextField
-        onFocus={() => setFocused(true)}
-        onBlur={() => setFocused(false)}
         disabled={!rate || loading}
         value={tempValue ? tempValue : ''}
         error={isTo ? Boolean(toValueError) : Boolean(fromValueError)}
