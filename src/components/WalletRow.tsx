@@ -3,7 +3,7 @@ import { Box, MenuItem, TextField, Typography } from '@mui/material'
 import { CurrencyName } from '../types/currency'
 import { StartAndor } from './StartAndor'
 import { getCurrency } from '../helpers/getCurrency'
-import { useAppState } from '../hoops/useApp'
+import { useAppState } from '../hooks/useApp'
 
 type WalletProps = {
   currencies: CurrencyName[]

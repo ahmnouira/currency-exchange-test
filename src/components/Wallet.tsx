@@ -4,7 +4,7 @@ import { convertCurrency } from '../api/convertCurrency'
 import { WalletCard } from './WalletCard'
 import { WalletChip } from './WalletChip'
 import { WalletRow } from './WalletRow'
-import { useAppState } from '../hoops/useApp'
+import { useAppState } from '../hooks/useApp'
 
 export const Wallet = () => {
     const {
