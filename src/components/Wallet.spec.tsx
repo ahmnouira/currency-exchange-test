@@ -1,4 +1,4 @@
-import { render, fireEvent } from '@testing-library/react'
+import { render, fireEvent, act } from '@testing-library/react'
 import { AppProvider, initialState } from '../contexts/AppContexts'
 import { Wallet } from './Wallet'
 
@@ -24,7 +24,8 @@ describe('Wallet', () => {
       </AppProvider>
     )
     expect(container).toBeInTheDocument()
-    const exhange = await findByText('Exchange')
+    const exhange = (await findByText('Exchange')) as HTMLButtonElement
     fireEvent.click(exhange)
+    expect(exhange.disabled).toBe(true)
   })
 })

@@ -57,7 +57,15 @@ export const WalletRow = ({ currencies, name }: WalletProps) => {
   return (
     <Box display='flex' justifyContent='space-between' alignItems='center' style={{ marginTop: 8, padding: 8 }}>
       <Box m={2}>
-        <TextField select fullWidth style={{}} value={isTo ? to : from} onChange={handleChange} variant='outlined'>
+        <TextField
+          role='option'
+          select
+          fullWidth
+          style={{}}
+          value={isTo ? to : from}
+          onChange={handleChange}
+          variant='outlined'
+        >
           {currencies.map((option) => (
             <MenuItem key={option} value={option}>
               {option}
@@ -72,6 +80,7 @@ export const WalletRow = ({ currencies, name }: WalletProps) => {
         </Box>
       </Box>
       <TextField
+        data-testid='input'
         disabled={!rate || loading}
         value={tempValue ? tempValue : ''}
         error={isTo ? Boolean(toValueError) : Boolean(fromValueError)}

@@ -19,7 +19,6 @@ export const Wallet = () => {
     const getData = async () => {
       try {
         const result = await convertCurrency(from, to)
-        // setValues([0, 0])
         dispatch({ type: 'SET_RATE_SUCCES', payload: result[`${from}_${to}`] as number })
         dispatch({ type: 'SET_TO_VALUE', payload: toValue })
         dispatch({ type: 'SET_FROM_VALUE', payload: fromValue })
