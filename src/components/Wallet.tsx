@@ -85,6 +85,7 @@ export const Wallet = () => {
         </Box>
       </WalletCard>
       <Button
+        role='button'
         color='secondary'
         variant='contained'
         onClick={handleExchange}
@@ -92,7 +93,7 @@ export const Wallet = () => {
       >
         Exchange
       </Button>
-      <Snackbar open={snackber} autoHideDuration={3000} onClose={() => setSnackbar(false)}>
+      <Snackbar role='alert' open={snackber} autoHideDuration={3000} onClose={() => setSnackbar(false)}>
         <Alert severity='success' sx={{ width: '100%' }}>
           Exchange Done
         </Alert>
